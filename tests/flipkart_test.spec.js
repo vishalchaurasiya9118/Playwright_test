@@ -1,13 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { text } from 'stream/consumers';
 
 test('flipkart', async ({ page }) => {
   await page.goto('https://www.flipkart.com/');
-  await page.getByLabel('Search', { exact: true }).click();
-  await page.getByLabel('Search', { exact: true }).click();
   await page.waitForTimeout(2000);
-  await page.getByLabel('Search', { exact: true }).fill('youtube');
-  await page.waitForTimeout(2000);
+  await page.locator("//span[text()='Grocery']").click();
 });
 
 test('orange', async ({ browser }) => {
@@ -87,7 +83,7 @@ test('orange', async ({ browser }) => {
     await page.waitForTimeout(2000);
   });
 
-  test.only('E2E_Scenario', async ({ page }) => {
+  test('E2E_Scenario', async ({ page }) => {
 
     const productName = 'ZARA COAT 3';
     const products = page.locator(".card-body");
