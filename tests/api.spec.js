@@ -1,8 +1,11 @@
+
+
 import { test, expect, request } from '@playwright/test';
 const loginPayload = {userEmail: "mr.coolvishal89@gmail.com", userPassword: "Zack@123"}
 
+let token;
 
-test.beforeAll( async() =>
+test.beforeAll( async()=>
 {
 
    const apiContext = await request.newContext();
@@ -13,22 +16,22 @@ test.beforeAll( async() =>
 )
     expect(loginResponse.ok()).toBeTruthy();
     const loginResponseJson = await loginResponse.json();
-    const token =loginResponseJson.token;
+    token =loginResponseJson.token;
     console.log("Token Is: "+token);
-    const body = loginResponse.body();
-    console.log("Response Body Is :"+body);
-
+  
 });
 
 test('API_Testing', async ({ page }) => {
 
+    page.addInitScript(value =>
+    {
+        window.localStorage.setItem('token',value);
+    }, token
+    );
+
     const productName = 'ZARA COAT 3';
+    await page.goto('https://rahulshettyacademy.com/client/');
     const products = page.locator(".card-body");
-    await page.goto('https://rahulshettyacademy.com/client');
-    await page.locator('#userEmail').fill('mr.coolvishal89@gmail.com');
-    await page.locator('#userPassword').fill('Zack@123');
-    await page.locator("[value='Login']").click();
-    await page.waitForTimeout(2000);
     const titles = await page.locator(".card-body b").allTextContents();
     console.log(titles);
     const count = await products.count();
@@ -93,3 +96,6 @@ test('API_Testing', async ({ page }) => {
     await expect(page.locator(".mt-4.ng-star-inserted")).toContainText('You have No Orders to show at this time.');
 
   });
+
+
+
